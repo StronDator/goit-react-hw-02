@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import Description from "./Description/Description";
-// import './App.css';
 import Options from "./Options/Options";
 import Feedback from "./Feedback/Feedback";
 import Notification from "./Notification/Notification";
@@ -27,8 +26,6 @@ export default function App() {
   }, [state]);
 
   const updateFeedback = (feedbackType) => {
-    // const newState = { ...state };
-    // newState[feedbackType] += 1;
     setState({ ...state, [feedbackType]: state[feedbackType] + 1 });
   };
 
@@ -37,22 +34,24 @@ export default function App() {
   };
 
   const totalFeedback = state.good + state.neutral + state.bad;
+  const positivePercentage = totalFeedback
+    ? Math.round((state.good / totalFeedback) * 100)
+    : 0;
   const notificationText = "No feedback yet";
 
   return (
     <>
       <Description
         title="Sip Happens Café"
-        text="Please leave your feedback about our service by selecting one of the options below.
-"
-      ></Description>
+        text="Please leave your feedback about our service by selecting one of the options below."
+      />
       <Options
         updateFeedback={updateFeedback}
         resetFeedback={resetFeedback}
         totalFeedback={totalFeedback}
       />
       {totalFeedback ? (
-        <Feedback {...state} />
+        <Feedback {...state} positivePercentage={positivePercentage} />
       ) : (
         <Notification text={notificationText} />
       )}
